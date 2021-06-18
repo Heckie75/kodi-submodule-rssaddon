@@ -65,6 +65,10 @@ class AbstractRssAddon:
 
         pass
 
+    def is_force_http(self):
+
+        return False
+
     def _load_rss(self, url):
 
         def _parse_item(_ci, fallback_image):
@@ -75,7 +79,7 @@ class AbstractRssAddon:
             item = {
                 "name": _ci["title"],
                 "description": _ci["description"] if "description" in _ci else "",
-                "stream_url": _ci["enclosure"]["@url"],
+                "stream_url": _ci["enclosure"]["@url"] if not self.is_force_http() else _ci["enclosure"]["@url"].replace("https://", "http://"),
                 "type": "video" if _ci["enclosure"]["@type"].split("/")[0] == "video" else "music",
                 "icon": _ci["itunes:image"]["@href"] if "itunes:image" in _ci and "@href" in _ci["itunes:image"] else fallback_image
             }
