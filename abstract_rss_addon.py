@@ -23,14 +23,12 @@ class AbstractRssAddon:
 
     addon = None
     addon_handle = None
-    plugin_id = None
     addon_dir = None
     anchor_for_latest = True
 
-    def __init__(self, plugin_id, addon_handle):
+    def __init__(self, addon_handle):
 
-        self.plugin_id = plugin_id
-        self.addon = xbmcaddon.Addon(id=plugin_id)
+        self.addon = xbmcaddon.Addon()
         self.addon_handle = addon_handle
         self.addon_dir = xbmcvfs.translatePath(self.addon.getAddonInfo('path'))
 
@@ -218,7 +216,7 @@ class AbstractRssAddon:
 
         else:
             url = "".join(
-                ["plugin://", self.plugin_id, item_path, param_string])
+                ["plugin://", self.addon.getAddonInfo("id"), item_path, param_string])
 
         is_folder = "node" in entry
         li.setProperty("IsPlayable", "false" if is_folder else "true")
