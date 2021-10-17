@@ -106,7 +106,7 @@ class AbstractRssAddon:
 
         res, cookies = http_request(self.addon, url)
 
-        if not res.startswith("<?xml"):
+        if not res.startswith("<?xml") and not res.startswith("<rss"):
             raise HttpStatusError("%s %s" % (
                 self.addon.getLocalizedString(32155), url))
 
