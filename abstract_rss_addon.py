@@ -200,7 +200,7 @@ class AbstractRssAddon:
             li.setInfo(item["type"], infos)
 
         if "icon" in item and item["icon"]:
-            li.setArt({"icon": item["icon"]})
+            li.setArt({"thumb": item["icon"]})
         else:
             addon_dir = xbmcvfs.translatePath(self.addon.getAddonInfo('path'))
             li.setArt({"icon": os.path.join(
