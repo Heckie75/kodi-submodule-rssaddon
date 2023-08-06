@@ -31,7 +31,7 @@ class AbstractRssAddon:
         self.addon = xbmcaddon.Addon()
         self.addon_handle = addon_handle
         self.addon_dir = xbmcvfs.translatePath(self.addon.getAddonInfo('path'))
-        
+
         self.params = dict()
 
     def handle(self, argv: 'list[str]') -> None:
@@ -189,6 +189,10 @@ class AbstractRssAddon:
 
         return item["description"] if "description" in item else ""
 
+    def build_url(self, item) -> str:
+
+        return item["stream_url"]
+
     def _create_list_item(self, item: dict) -> xbmcgui.ListItem:
 
         li = xbmcgui.ListItem(label=self.build_label(item))
@@ -197,7 +201,7 @@ class AbstractRssAddon:
             li.setProperty("label2", item["description"])
 
         if "stream_url" in item:
-            li.setPath(item["stream_url"])
+            li.setPath(self.build_url(item))
 
         if "type" in item:
             infos = {
@@ -260,7 +264,7 @@ class AbstractRssAddon:
         li = self._create_list_item(entry)
 
         if "stream_url" in entry:
-            url = entry["stream_url"]
+            url = self.build_url(entry)
 
         else:
             url = "".join(
@@ -307,7 +311,7 @@ class AbstractRssAddon:
                     li = self._create_list_item(item)
                     xbmcplugin.addDirectoryItem(handle=self.addon_handle,
                                                 listitem=li,
-                                                url=item["stream_url"],
+                                                url=self.build_url(item),
                                                 isFolder=False)
 
             if li and "setDateTime" in dir(li):  # available since Kodi v20
