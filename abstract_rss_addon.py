@@ -60,9 +60,12 @@ class AbstractRssAddon:
         else:
             self.route(path)
 
-    def decode_param(self, encoded_param: str) -> str:
+    def decode_param(self, value: str) -> str:
 
-        return base64.urlsafe_b64decode(encoded_param).decode("utf-8")
+        try:
+            return base64.urlsafe_b64decode(value).decode("utf-8")
+        except:
+            return value
 
     def check_disclaimer(self) -> bool:
 
